@@ -135,7 +135,8 @@ func GetAllAirdrop() ([]interface{}, error) {
 	return allAirdrops, nil
 }
 
-func UpdateAirdropByID(col string, id primitive.ObjectID, name string, task string, link string) error {
+func UpdateAirdropFreeByID(id primitive.ObjectID, name string, task string, link string) error {
+	collection := "airdrop_free"
 	filter := bson.M{"_id": id}
 
 	update := bson.M{
@@ -146,9 +147,9 @@ func UpdateAirdropByID(col string, id primitive.ObjectID, name string, task stri
 		},
 	}
 
-	result, err := database.Collection(col).UpdateOne(context.Background(), filter, update)
+	result, err := database.Collection(collection).UpdateOne(context.Background(), filter, update)
 	if err != nil {
-		fmt.Printf("UpdateAirdrop: %v\n", err)
+		fmt.Printf("UpdateAirdropFreeByID: %v\n", err)
 		return err
 	}
 
@@ -159,17 +160,59 @@ func UpdateAirdropByID(col string, id primitive.ObjectID, name string, task stri
 	return nil
 }
 
-func DeleteAirdropByID(col string, id primitive.ObjectID) error {
-	collection := database.Collection(col)
+func UpdateAirdropPaidByID(id primitive.ObjectID, name string, task string, link string) error {
+	collection := "airdrop_paid"
+	filter := bson.M{"_id": id}
+
+	update := bson.M{
+		"$set": bson.M{
+			"name": name,
+			"task": task,
+			"link": link,
+		},
+	}
+
+	result, err := database.Collection(collection).UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		fmt.Printf("UpdateAirdropPaidByID: %v\n", err)
+		return err
+	}
+
+	if result.ModifiedCount == 0 {
+		return errors.New("no data has been changed with the specified ID")
+	}
+
+	return nil
+}
+
+
+func DeleteAirdropFreeByID(id primitive.ObjectID) error {
+	collection := database.Collection("airdrop_free")
 	filter := bson.M{"_id": id}
 
 	result, err := collection.DeleteOne(context.TODO(), filter)
 	if err != nil {
-		return fmt.Errorf("error deleting data for ID %s: %s", id.Hex(), err.Error())
+		return fmt.Errorf("error deleting data for ID %s in airdrop_free: %s", id.Hex(), err.Error())
 	}
 
 	if result.DeletedCount == 0 {
-		return fmt.Errorf("data with ID %s not found", id.Hex())
+		return fmt.Errorf("data with ID %s not found in airdrop_free", id.Hex())
+	}
+
+	return nil
+}
+
+func DeleteAirdropPaidByID(id primitive.ObjectID) error {
+	collection := database.Collection("airdrop_paid")
+	filter := bson.M{"_id": id}
+
+	result, err := collection.DeleteOne(context.TODO(), filter)
+	if err != nil {
+		return fmt.Errorf("error deleting data for ID %s in airdrop_paid: %s", id.Hex(), err.Error())
+	}
+
+	if result.DeletedCount == 0 {
+		return fmt.Errorf("data with ID %s not found in airdrop_paid", id.Hex())
 	}
 
 	return nil

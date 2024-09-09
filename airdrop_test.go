@@ -118,38 +118,104 @@ func TestGetAirdropPaidByID(t *testing.T) {
 	}
 }
 
-func TestUpdateAirdropByID(t *testing.T) {
-	id, err := primitive.ObjectIDFromHex("66dc8cf3b1bc5acfc329268b")
-	if err != nil {
-		t.Fatalf("Invalid ID format: %v", err)
-	}
-
-	err = UpdateAirdropByID("airdrop_paid", id, "git3", "hub3", "https://example.com3")
-	if err != nil {
-		t.Fatalf("Failed to update Airdrop by ID: %v", err)
-	}
-
-	updatedAirdrop, err := GetAirdropFreeByID(id)
-	if err != nil {
-		t.Fatalf("Failed to retrieve updated AirdropFree by ID: %v", err)
-	}
-
-	if updatedAirdrop.Name != "git3" || updatedAirdrop.Task != "hub3" || updatedAirdrop.Link != "https://example.com3" {
-		t.Errorf("AirdropFree data not updated correctly: got %v", updatedAirdrop)
-	}
-}
-
-func TestDeleteAirdropByID(t *testing.T) {
-	id, err := primitive.ObjectIDFromHex("66dc8784c047f376f4c45294")
+func TestUpdateAirdropFreeByID(t *testing.T) {
+	id, err := primitive.ObjectIDFromHex("66cfa14dd39e7e3b0c85b295")
 	if err != nil {
 		t.Errorf("Invalid ID format: %v", err)
 		return
 	}
 
-	err = DeleteAirdropByID("airdrop_paid", id)
+	newName := "Updated test3"
+	newTask := "Updated test3"
+	newLink := "https://app.test/updated"
+
+	err = UpdateAirdropFreeByID(id, newName, newTask, newLink)
+	if err != nil {
+		t.Errorf("Failed to update AirdropFree by ID: %v", err)
+		return
+	}
+
+	airdrop, err := GetAirdropFreeByID(id)
+	if err != nil {
+		t.Errorf("Failed to retrieve AirdropFree by ID after update: %v", err)
+		return
+	}
+
+	if airdrop.Name != newName || airdrop.Task != newTask || airdrop.Link != newLink {
+		t.Errorf("AirdropFree not updated correctly. Got: %+v", airdrop)
+	} else {
+		fmt.Printf("AirdropFree updated successfully: %+v\n", airdrop)
+	}
+}
+
+func TestUpdateAirdropPaidByID(t *testing.T) {
+	id, err := primitive.ObjectIDFromHex("66df1c943e41fd55f19964e9")
+	if err != nil {
+		t.Errorf("Invalid ID format: %v", err)
+		return
+	}
+
+	newName := "Updated Test2"
+	newTask := "updated test2"
+	newLink := "https://app.test/updated"
+
+	err = UpdateAirdropPaidByID(id, newName, newTask, newLink)
+	if err != nil {
+		t.Errorf("Failed to update AirdropPaid by ID: %v", err)
+		return
+	}
+
+	airdrop, err := GetAirdropPaidByID(id)
+	if err != nil {
+		t.Errorf("Failed to retrieve AirdropPaid by ID after update: %v", err)
+		return
+	}
+
+	if airdrop.Name != newName || airdrop.Task != newTask || airdrop.Link != newLink {
+		t.Errorf("AirdropPaid not updated correctly. Got: %+v", airdrop)
+	} else {
+		fmt.Printf("AirdropPaid updated successfully: %+v\n", airdrop)
+	}
+}
+
+func TestDeleteAirdropFreeByID(t *testing.T) {
+	id, err := primitive.ObjectIDFromHex("66cfa14dd39e7e3b0c85b295")
+	if err != nil {
+		t.Errorf("Invalid ID format: %v", err)
+		return
+	}
+
+	err = DeleteAirdropFreeByID(id)
 	if err != nil {
 		t.Errorf("Failed to delete AirdropFree by ID: %v", err)
+		return
+	}
+
+	airdrop, err := GetAirdropFreeByID(id)
+	if err == nil {
+		t.Errorf("Expected no document, but found AirdropFree: %+v", airdrop)
 	} else {
-		fmt.Printf("Deleted AirdropFree by ID: %v\n", id.Hex())
+		fmt.Printf("AirdropFree deleted successfully, no document found with ID: %s\n", id.Hex())
+	}
+}
+
+func TestDeleteAirdropPaidByID(t *testing.T) {
+	id, err := primitive.ObjectIDFromHex("66df1c943e41fd55f19964e9")
+	if err != nil {
+		t.Errorf("Invalid ID format: %v", err)
+		return
+	}
+
+	err = DeleteAirdropPaidByID(id)
+	if err != nil {
+		t.Errorf("Failed to delete AirdropPaid by ID: %v", err)
+		return
+	}
+
+	airdrop, err := GetAirdropPaidByID(id)
+	if err == nil {
+		t.Errorf("Expected no document, but found AirdropPaid: %+v", airdrop)
+	} else {
+		fmt.Printf("AirdropPaid deleted successfully, no document found with ID: %s\n", id.Hex())
 	}
 }
