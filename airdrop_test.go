@@ -42,6 +42,41 @@ func TestGetAllAirdropFree(t *testing.T) {
 	}
 }
 
+func TestGetAllAirdrop(t *testing.T) {
+	allAirdrops, err := GetAllAirdrop()
+	if err != nil {
+		t.Errorf("Failed to retrieve all airdrops: %v", err)
+		return
+	}
+
+	if len(allAirdrops) == 0 {
+		t.Errorf("No airdrops found.")
+		return
+	}
+
+	fmt.Printf("Retrieved %d airdrops:\n", len(allAirdrops))
+	for _, airdrop := range allAirdrops {
+		fmt.Printf("%v\n", airdrop)
+	}
+
+	freeAirdrops, err := GetAllAirdropFree()
+	if err != nil {
+		t.Errorf("Failed to retrieve AirdropFree data: %v", err)
+		return
+	}
+
+	paidAirdrops, err := GetAllAirdropPaid()
+	if err != nil {
+		t.Errorf("Failed to retrieve AirdropPaid data: %v", err)
+		return
+	}
+
+	expectedCount := len(freeAirdrops) + len(paidAirdrops)
+	if len(allAirdrops) != expectedCount {
+		t.Errorf("Expected %d airdrops, but got %d", expectedCount, len(allAirdrops))
+	}
+}
+
 func TestGetAllAirdropPaid(t *testing.T) {
 	data, err := GetAllAirdropPaid()
 	if err != nil {
