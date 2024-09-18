@@ -3,6 +3,7 @@ package airdrop
 import (
 	"context"
 	"errors"
+	"time"
 	"fmt"
 	"os"
 	"go.mongodb.org/mongo-driver/bson"
@@ -47,22 +48,26 @@ func InsertOneDoc(collection string, doc interface{}) (interface{}, error) {
 	return insertResult.InsertedID, nil
 }
 
-func InsertAirdropFree(name string, task string, link string) (interface{}, error) {
+func InsertAirdropFree(name string, task string, link string, level string) (interface{}, error) {
 	freeAirdrop := AirdropFree{
-		ID:   primitive.NewObjectID(),
-		Name: name,
-		Task: task,
-		Link: link,
+		ID:        primitive.NewObjectID(),
+		Name:      name,
+		Task:      task,
+		Link:      link,
+		Level:     level,
+		CreatedAt: time.Now(),
 	}
 	return InsertOneDoc("airdrop_free", freeAirdrop)
 }
 
-func InsertAirdropPaid(name string, task string, link string) (interface{}, error) {
+func InsertAirdropPaid(name string, task string, link string, level string) (interface{}, error) {
 	paidAirdrop := AirdropPaid{
-		ID:   primitive.NewObjectID(),
-		Name: name,
-		Task: task,
-		Link: link,
+		ID:        primitive.NewObjectID(),
+		Name:      name,
+		Task:      task,
+		Link:      link,
+		Level:     level,
+		CreatedAt: time.Now(),
 	}
 	return InsertOneDoc("airdrop_paid", paidAirdrop)
 }
@@ -113,6 +118,34 @@ func GetAirdropPaidByID(id primitive.ObjectID) (AirdropPaid, error) {
 	return airdrop, nil
 }
 
+func GetAirdropFreeByName(name string) ([]AirdropFree, error) {
+	collection := database.Collection("airdrop_free")
+	filter := bson.M{"name": bson.M{"$regex": primitive.Regex{Pattern: name, Options: "i"}}}
+	cursor, err := collection.Find(context.TODO(), filter)
+	if err != nil {
+		return nil, fmt.Errorf("GetAirdropFreeByName Find: %v", err)
+	}
+	var airdrops []AirdropFree
+	if err = cursor.All(context.TODO(), &airdrops); err != nil {
+		return nil, fmt.Errorf("GetAirdropFreeByName All: %v", err)
+	}
+	return airdrops, nil
+}
+
+func GetAirdropPaidByName(name string) ([]AirdropPaid, error) {
+	collection := database.Collection("airdrop_paid")
+	filter := bson.M{"name": bson.M{"$regex": primitive.Regex{Pattern: name, Options: "i"}}}
+	cursor, err := collection.Find(context.TODO(), filter)
+	if err != nil {
+		return nil, fmt.Errorf("GetAirdropPaidByName Find: %v", err)
+	}
+	var airdrops []AirdropPaid
+	if err = cursor.All(context.TODO(), &airdrops); err != nil {
+		return nil, fmt.Errorf("GetAirdropPaidByName All: %v", err)
+	}
+	return airdrops, nil
+}
+
 func GetAllAirdrop() ([]interface{}, error) {
 	var allAirdrops []interface{}
 
@@ -135,22 +168,22 @@ func GetAllAirdrop() ([]interface{}, error) {
 	return allAirdrops, nil
 }
 
-func UpdateAirdropFreeByID(id primitive.ObjectID, name string, task string, link string) error {
+func UpdateAirdropFreeByID(id primitive.ObjectID, name, task, link, level string) error {
 	collection := "airdrop_free"
 	filter := bson.M{"_id": id}
 
 	update := bson.M{
 		"$set": bson.M{
-			"name": name,
-			"task": task,
-			"link": link,
+			"name":       name,
+			"task":       task,
+			"link":       link,
+			"level":      level,
 		},
 	}
 
 	result, err := database.Collection(collection).UpdateOne(context.Background(), filter, update)
 	if err != nil {
-		fmt.Printf("UpdateAirdropFreeByID: %v\n", err)
-		return err
+		return fmt.Errorf("UpdateAirdropFreeByID: %v", err)
 	}
 
 	if result.ModifiedCount == 0 {
@@ -160,22 +193,22 @@ func UpdateAirdropFreeByID(id primitive.ObjectID, name string, task string, link
 	return nil
 }
 
-func UpdateAirdropPaidByID(id primitive.ObjectID, name string, task string, link string) error {
+func UpdateAirdropPaidByID(id primitive.ObjectID, name, task, link, level string) error {
 	collection := "airdrop_paid"
 	filter := bson.M{"_id": id}
 
 	update := bson.M{
 		"$set": bson.M{
-			"name": name,
-			"task": task,
-			"link": link,
+			"name":       name,
+			"task":       task,
+			"link":       link,
+			"level":      level,
 		},
 	}
 
 	result, err := database.Collection(collection).UpdateOne(context.Background(), filter, update)
 	if err != nil {
-		fmt.Printf("UpdateAirdropPaidByID: %v\n", err)
-		return err
+		return fmt.Errorf("UpdateAirdropPaidByID: %v", err)
 	}
 
 	if result.ModifiedCount == 0 {
@@ -184,7 +217,6 @@ func UpdateAirdropPaidByID(id primitive.ObjectID, name string, task string, link
 
 	return nil
 }
-
 
 func DeleteAirdropFreeByID(id primitive.ObjectID) error {
 	collection := database.Collection("airdrop_free")
