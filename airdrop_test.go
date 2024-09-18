@@ -8,10 +8,11 @@ import (
 )
 
 func TestInsertAirdropFree(t *testing.T) {
-	name := "Beacon2"
-	task := "GAME2"
-	link := "https://nfq.thebeacon.gg/?referral=0xNekowawolf2"
-	hasil, err := InsertAirdropFree(name, task, link)
+	name := "initia2"
+	task := "TESTNET"
+	link := "https://initiatest.com"
+	level := "hard"
+	hasil, err := InsertAirdropFree(name, task, link, level)
 	if err != nil {
 		t.Errorf("Failed to insert AirdropFree: %v", err)
 	} else {
@@ -20,10 +21,11 @@ func TestInsertAirdropFree(t *testing.T) {
 }
 
 func TestInsertAirdropPaid(t *testing.T) {
-	name := "Solv Protocol2"
+	name := "test"
 	task := "HOLD"
-	link := "https://app.solv.finance/points2"
-	hasil, err := InsertAirdropPaid(name, task, link)
+	link := "https://test.com"
+	level := "medium"
+	hasil, err := InsertAirdropPaid(name, task, link, level)
 	if err != nil {
 		t.Errorf("Failed to insert AirdropPaid: %v", err)
 	} else {
@@ -118,18 +120,39 @@ func TestGetAirdropPaidByID(t *testing.T) {
 	}
 }
 
+func TestGetAirdropFreeByName(t *testing.T) {
+	name := "Initia"
+	airdrop, err := GetAirdropFreeByName(name)
+	if err != nil {
+		t.Fatalf("Error calling GetAirdropFreeByName: %v", err)
+	}
+
+	fmt.Println("Free Airdrops found:", airdrop)
+}
+
+func TestGetAirdropPaidByName(t *testing.T) {
+	name := "Dflow"
+	airdrop, err := GetAirdropPaidByName(name)
+	if err != nil {
+		t.Fatalf("Error calling GetAirdropPaidByName: %v", err)
+	}
+
+	fmt.Println("Paid Airdrops found:", airdrop)
+}
+
 func TestUpdateAirdropFreeByID(t *testing.T) {
-	id, err := primitive.ObjectIDFromHex("66cfa14dd39e7e3b0c85b295")
+	id, err := primitive.ObjectIDFromHex("66ea30e2017690fa6e447744")
 	if err != nil {
 		t.Errorf("Invalid ID format: %v", err)
 		return
 	}
 
-	newName := "Updated test3"
-	newTask := "Updated test3"
-	newLink := "https://app.test/updated"
+	newName := "Initia 3"
+	newTask := "TESTNET"
+	newLink := "https://initiatest.com/updated"
+	newLevel := "Easy"
 
-	err = UpdateAirdropFreeByID(id, newName, newTask, newLink)
+	err = UpdateAirdropFreeByID(id, newName, newTask, newLink, newLevel)
 	if err != nil {
 		t.Errorf("Failed to update AirdropFree by ID: %v", err)
 		return
@@ -141,7 +164,7 @@ func TestUpdateAirdropFreeByID(t *testing.T) {
 		return
 	}
 
-	if airdrop.Name != newName || airdrop.Task != newTask || airdrop.Link != newLink {
+	if airdrop.Name != newName || airdrop.Task != newTask || airdrop.Link != newLink || airdrop.Level != newLevel {
 		t.Errorf("AirdropFree not updated correctly. Got: %+v", airdrop)
 	} else {
 		fmt.Printf("AirdropFree updated successfully: %+v\n", airdrop)
@@ -149,17 +172,18 @@ func TestUpdateAirdropFreeByID(t *testing.T) {
 }
 
 func TestUpdateAirdropPaidByID(t *testing.T) {
-	id, err := primitive.ObjectIDFromHex("66df1c943e41fd55f19964e9")
+	id, err := primitive.ObjectIDFromHex("66ea2fbcf75fbbced4145728")
 	if err != nil {
 		t.Errorf("Invalid ID format: %v", err)
 		return
 	}
 
-	newName := "Updated Test2"
-	newTask := "updated test2"
+	newName := "Dflow 3"
+	newTask := "Retro"
 	newLink := "https://app.test/updated"
+	newLevel := "Medium"
 
-	err = UpdateAirdropPaidByID(id, newName, newTask, newLink)
+	err = UpdateAirdropPaidByID(id, newName, newTask, newLink, newLevel)
 	if err != nil {
 		t.Errorf("Failed to update AirdropPaid by ID: %v", err)
 		return
@@ -171,7 +195,7 @@ func TestUpdateAirdropPaidByID(t *testing.T) {
 		return
 	}
 
-	if airdrop.Name != newName || airdrop.Task != newTask || airdrop.Link != newLink {
+	if airdrop.Name != newName || airdrop.Task != newTask || airdrop.Link != newLink || airdrop.Level != newLevel {
 		t.Errorf("AirdropPaid not updated correctly. Got: %+v", airdrop)
 	} else {
 		fmt.Printf("AirdropPaid updated successfully: %+v\n", airdrop)
@@ -179,7 +203,7 @@ func TestUpdateAirdropPaidByID(t *testing.T) {
 }
 
 func TestDeleteAirdropFreeByID(t *testing.T) {
-	id, err := primitive.ObjectIDFromHex("66cfa14dd39e7e3b0c85b295")
+	id, err := primitive.ObjectIDFromHex("66ea30e2017690fa6e447744")
 	if err != nil {
 		t.Errorf("Invalid ID format: %v", err)
 		return
@@ -200,7 +224,7 @@ func TestDeleteAirdropFreeByID(t *testing.T) {
 }
 
 func TestDeleteAirdropPaidByID(t *testing.T) {
-	id, err := primitive.ObjectIDFromHex("66df1c943e41fd55f19964e9")
+	id, err := primitive.ObjectIDFromHex("66ea2fbcf75fbbced4145728")
 	if err != nil {
 		t.Errorf("Invalid ID format: %v", err)
 		return
