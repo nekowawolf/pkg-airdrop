@@ -14,9 +14,9 @@ func TestInsertAirdropFree(t *testing.T) {
 	level := "easy"
 	status := "active"
 	backed := "HashKey Capital, ConsenSys"
-	funds := 53.37
-	marketCap := 0.0
-	price := 0.0
+	funds := "53.37M"    
+	marketCap := "N/A"     
+	price := 0.0           
 	vesting := "N/A"
 	usdIncome := 0
 	linkClaim := "N/A"
@@ -36,9 +36,9 @@ func TestInsertAirdropPaid(t *testing.T) {
 	level := "medium"
 	status := "active"
 	backed := "Bixin Ventures, GSR"
-	funds := 8.00
-	marketCap := 0.0
-	price := 0.0
+	funds := "8.00M"        
+	marketCap := "N/A"     
+	price := 0.0           
 	vesting := "N/A"
 	usdIncome := 0 
 	linkClaim := "N/A"
@@ -159,7 +159,7 @@ func TestGetAirdropPaidByName(t *testing.T) {
 }
 
 func TestUpdateAirdropFreeByID(t *testing.T) {
-	id, err := primitive.ObjectIDFromHex("66f1840a78118a54382cbd46")
+	id, err := primitive.ObjectIDFromHex("66f19fbb4eebd2b30c48cee7")
 	if err != nil {
 		t.Errorf("Invalid ID format: %v", err)
 		return
@@ -171,9 +171,9 @@ func TestUpdateAirdropFreeByID(t *testing.T) {
 	newLevel := "easy"
 	newStatus := "ended"
 	newBacked := "HashKey Capital, ConsenSys"
-	newFunds := 53.37
-	newMarketCap := 632.23
-	newPrice := 0.2
+	newFunds := "53.37M"       
+	newMarketCap := "632.23M"  
+	newPrice := 0.2           
 	newVesting := "no"
 	newUSDIncome := 1200
 	newLinkClaim := "https://protocol.carv.io/claim"
@@ -201,7 +201,7 @@ func TestUpdateAirdropFreeByID(t *testing.T) {
 }
 
 func TestUpdateAirdropPaidByID(t *testing.T) {
-	id, err := primitive.ObjectIDFromHex("66f185b654cd8bed67057f0a")
+	id, err := primitive.ObjectIDFromHex("66f19f85f40b23cd9a357e38")
 	if err != nil {
 		t.Errorf("Invalid ID format: %v", err)
 		return
@@ -213,9 +213,9 @@ func TestUpdateAirdropPaidByID(t *testing.T) {
 	newLevel := "medium"
 	newStatus := "ended"
 	newBacked := "Bixin Ventures, GSR"
-	newFunds := 8.00
-	newMarketCap := 788.75
-	newPrice := 0.5
+	newFunds := "8.00M"        
+	newMarketCap := "788.75M" 
+	newPrice := 0.5          
 	newVesting := "yes"
 	newUSDIncome := 230
 	newLinkClaim := "https://owlto.finance/airdrop"

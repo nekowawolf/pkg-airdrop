@@ -48,7 +48,7 @@ func InsertOneDoc(collection string, doc interface{}) (interface{}, error) {
 	return insertResult.InsertedID, nil
 }
 
-func InsertAirdropFree(name, task, link, level, status, backed, vesting, linkClaim string, funds, marketCap, price float64, usdIncome int) (interface{}, error) {
+func InsertAirdropFree(name, task, link, level, status, backed, vesting, linkClaim string, funds, marketCap string, price float64, usdIncome int) (interface{}, error) {
 	freeAirdrop := AirdropFree{
 		ID:        primitive.NewObjectID(),
 		Name:      name,
@@ -57,18 +57,18 @@ func InsertAirdropFree(name, task, link, level, status, backed, vesting, linkCla
 		Level:     level,
 		Status:    status,
 		Backed:    backed,
-		Funds:     funds,
-		MarketCap: marketCap,
+		Funds:     funds,        
+		MarketCap: marketCap,    
 		Price:     price,
 		Vesting:   vesting,
-		USDIncome: usdIncome, 
+		USDIncome: usdIncome,
 		LinkClaim: linkClaim,
 		CreatedAt: time.Now(),
 	}
 	return InsertOneDoc("airdrop_free", freeAirdrop)
 }
 
-func InsertAirdropPaid(name, task, link, level, status, backed, vesting, linkClaim string, funds, marketCap, price float64, usdIncome int) (interface{}, error) {
+func InsertAirdropPaid(name, task, link, level, status, backed, vesting, linkClaim string, funds, marketCap string, price float64, usdIncome int) (interface{}, error) {
 	paidAirdrop := AirdropPaid{
 		ID:        primitive.NewObjectID(),
 		Name:      name,
@@ -77,8 +77,8 @@ func InsertAirdropPaid(name, task, link, level, status, backed, vesting, linkCla
 		Level:     level,
 		Status:    status,
 		Backed:    backed,
-		Funds:     funds,
-		MarketCap: marketCap,
+		Funds:     funds,        
+		MarketCap: marketCap,    
 		Price:     price,
 		Vesting:   vesting,
 		USDIncome: usdIncome,
@@ -184,7 +184,7 @@ func GetAllAirdrop() ([]interface{}, error) {
 	return allAirdrops, nil
 }
 
-func UpdateAirdropFreeByID(id primitive.ObjectID, name, task, link, level, status, backed, vesting, linkClaim string, funds, marketCap, price float64, usdIncome int) error {
+func UpdateAirdropFreeByID(id primitive.ObjectID, name, task, link, level, status, backed, vesting, linkClaim string, funds, marketCap string, price float64, usdIncome int) error {
 	collection := "airdrop_free"
 	filter := bson.M{"_id": id}
 
@@ -196,8 +196,8 @@ func UpdateAirdropFreeByID(id primitive.ObjectID, name, task, link, level, statu
 			"level":      level,
 			"status":     status,
 			"backed":     backed,
-			"funds":      funds,
-			"market_cap": marketCap,
+			"funds":      funds,        
+			"market_cap": marketCap,   
 			"price":      price,
 			"vesting":    vesting,
 			"usd_income": usdIncome,
@@ -217,7 +217,7 @@ func UpdateAirdropFreeByID(id primitive.ObjectID, name, task, link, level, statu
 	return nil
 }
 
-func UpdateAirdropPaidByID(id primitive.ObjectID, name, task, link, level, status, backed, vesting, linkClaim string, funds, marketCap, price float64, usdIncome int) error {
+func UpdateAirdropPaidByID(id primitive.ObjectID, name, task, link, level, status, backed, vesting, linkClaim string, funds, marketCap string, price float64, usdIncome int) error {
 	collection := "airdrop_paid"
 	filter := bson.M{"_id": id}
 
@@ -229,8 +229,8 @@ func UpdateAirdropPaidByID(id primitive.ObjectID, name, task, link, level, statu
 			"level":      level,
 			"status":     status,
 			"backed":     backed,
-			"funds":      funds,
-			"market_cap": marketCap,
+			"funds":      funds,        
+			"market_cap": marketCap,   
 			"price":      price,
 			"vesting":    vesting,
 			"usd_income": usdIncome,
