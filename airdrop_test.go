@@ -16,12 +16,12 @@ func TestInsertAirdropFree(t *testing.T) {
 	backed := "HashKey Capital, ConsenSys"
 	funds := "53.37M"    
 	marketCap := "N/A"     
-	price := 0.0           
 	vesting := "N/A"
-	usdIncome := 0
 	linkClaim := "N/A"
+	price := 0.0           
+	usdIncome := 0
 
-	hasil, err := InsertAirdropFree(name, task, link, level, status, backed, vesting, linkClaim, funds, marketCap, price, usdIncome)
+	hasil, err := InsertAirdropFree(name, task, link, level, status, backed, funds, marketCap, vesting, linkClaim, price, usdIncome)
 	if err != nil {
 		t.Errorf("Failed to insert AirdropFree: %v", err)
 	} else {
@@ -37,13 +37,13 @@ func TestInsertAirdropPaid(t *testing.T) {
 	status := "active"
 	backed := "Bixin Ventures, GSR"
 	funds := "8.00M"        
-	marketCap := "N/A"     
-	price := 0.0           
+	marketCap := "N/A"  
 	vesting := "N/A"
+	linkClaim := "N/A"   
+	price := 0.0           
 	usdIncome := 0 
-	linkClaim := "N/A"
-
-	hasil, err := InsertAirdropPaid(name, task, link, level, status, backed, vesting, linkClaim, funds, marketCap, price, usdIncome)
+	
+	hasil, err := InsertAirdropPaid(name, task, link, level, status, backed, funds, marketCap, vesting, linkClaim, price, usdIncome)
 	if err != nil {
 		t.Errorf("Failed to insert AirdropPaid: %v", err)
 	} else {
@@ -159,7 +159,7 @@ func TestGetAirdropPaidByName(t *testing.T) {
 }
 
 func TestUpdateAirdropFreeByID(t *testing.T) {
-	id, err := primitive.ObjectIDFromHex("66f19fbb4eebd2b30c48cee7")
+	id, err := primitive.ObjectIDFromHex("66f272a722665e34a611b33b")
 	if err != nil {
 		t.Errorf("Invalid ID format: %v", err)
 		return
@@ -173,12 +173,12 @@ func TestUpdateAirdropFreeByID(t *testing.T) {
 	newBacked := "HashKey Capital, ConsenSys"
 	newFunds := "53.37M"       
 	newMarketCap := "632.23M"  
-	newPrice := 0.2           
 	newVesting := "no"
-	newUSDIncome := 1200
 	newLinkClaim := "https://protocol.carv.io/claim"
-
-	err = UpdateAirdropFreeByID(id, newName, newTask, newLink, newLevel, newStatus, newBacked, newVesting, newLinkClaim, newFunds, newMarketCap, newPrice, newUSDIncome)
+	newPrice := 0.2      
+	newUSDIncome := 1200
+	
+	err = UpdateAirdropFreeByID(id, newName, newTask, newLink, newLevel, newStatus, newBacked, newFunds, newMarketCap, newVesting, newLinkClaim, newPrice, newUSDIncome)
 	if err != nil {
 		t.Errorf("Failed to update AirdropFree by ID: %v", err)
 		return
@@ -192,8 +192,8 @@ func TestUpdateAirdropFreeByID(t *testing.T) {
 
 	if airdrop.Name != newName || airdrop.Task != newTask || airdrop.Link != newLink || airdrop.Level != newLevel ||
 		airdrop.Status != newStatus || airdrop.Backed != newBacked || airdrop.Funds != newFunds ||
-		airdrop.MarketCap != newMarketCap || airdrop.Price != newPrice || airdrop.Vesting != newVesting ||
-		airdrop.USDIncome != newUSDIncome || airdrop.LinkClaim != newLinkClaim {
+		airdrop.MarketCap != newMarketCap || airdrop.Vesting != newVesting || airdrop.LinkClaim != newLinkClaim ||
+		airdrop.Price != newPrice || airdrop.USDIncome != newUSDIncome {
 		t.Errorf("AirdropFree not updated correctly. Got: %+v", airdrop)
 	} else {
 		fmt.Printf("AirdropFree updated successfully: %+v\n", airdrop)
@@ -214,13 +214,14 @@ func TestUpdateAirdropPaidByID(t *testing.T) {
 	newStatus := "ended"
 	newBacked := "Bixin Ventures, GSR"
 	newFunds := "8.00M"        
-	newMarketCap := "788.75M" 
-	newPrice := 0.5          
+	newMarketCap := "788.75M"   
 	newVesting := "yes"
-	newUSDIncome := 230
 	newLinkClaim := "https://owlto.finance/airdrop"
+	newPrice := 0.5   
+	newUSDIncome := 230
+	
 
-	err = UpdateAirdropPaidByID(id, newName, newTask, newLink, newLevel, newStatus, newBacked, newVesting, newLinkClaim, newFunds, newMarketCap, newPrice, newUSDIncome)
+	err = UpdateAirdropPaidByID(id, newName, newTask, newLink, newLevel, newStatus, newBacked, newFunds, newMarketCap, newVesting, newLinkClaim, newPrice, newUSDIncome)
 	if err != nil {
 		t.Errorf("Failed to update AirdropPaid by ID: %v", err)
 		return
@@ -234,8 +235,8 @@ func TestUpdateAirdropPaidByID(t *testing.T) {
 
 	if airdrop.Name != newName || airdrop.Task != newTask || airdrop.Link != newLink || airdrop.Level != newLevel ||
 		airdrop.Status != newStatus || airdrop.Backed != newBacked || airdrop.Funds != newFunds ||
-		airdrop.MarketCap != newMarketCap || airdrop.Price != newPrice || airdrop.Vesting != newVesting ||
-		airdrop.USDIncome != newUSDIncome || airdrop.LinkClaim != newLinkClaim {
+		airdrop.MarketCap != newMarketCap || airdrop.Vesting != newVesting || airdrop.LinkClaim != newLinkClaim ||
+		airdrop.Price != newPrice || airdrop.USDIncome != newUSDIncome {
 		t.Errorf("AirdropPaid not updated correctly. Got: %+v", airdrop)
 	} else {
 		fmt.Printf("AirdropPaid updated successfully: %+v\n", airdrop)
