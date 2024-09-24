@@ -184,7 +184,7 @@ func GetAllAirdrop() ([]interface{}, error) {
 	return allAirdrops, nil
 }
 
-func UpdateAirdropFreeByID(id primitive.ObjectID, name, task, link, level, status, backed, vesting, linkClaim string, funds, marketCap string, price float64, usdIncome int) error {
+func UpdateAirdropFreeByID(id primitive.ObjectID, name, task, link, level, status, backed,funds, marketCap, vesting, linkClaim string, price float64, usdIncome int) error {
 	collection := "airdrop_free"
 	filter := bson.M{"_id": id}
 
@@ -217,7 +217,7 @@ func UpdateAirdropFreeByID(id primitive.ObjectID, name, task, link, level, statu
 	return nil
 }
 
-func UpdateAirdropPaidByID(id primitive.ObjectID, name, task, link, level, status, backed, vesting, linkClaim string, funds, marketCap string, price float64, usdIncome int) error {
+func UpdateAirdropPaidByID(id primitive.ObjectID, name, task, link, level, status, backed, funds, marketCap, vesting, linkClaim string,  price float64, usdIncome int) error {
 	collection := "airdrop_paid"
 	filter := bson.M{"_id": id}
 
