@@ -48,7 +48,13 @@ func InsertOneDoc(collection string, doc interface{}) (interface{}, error) {
 	return insertResult.InsertedID, nil
 }
 
-func InsertAirdropFree(name, task, link, level, status, backed, funds, marketCap, vesting, linkClaim string, price float64, usdIncome int) (interface{}, error) {
+func InsertAirdropFree(name, task, link, level, status, backed, funds, supply, marketCap, vesting, linkClaim string, price float64, usdIncome int) (interface{}, error) {
+	var endedAt *time.Time
+	if status == "ended" {
+		now := time.Now()
+		endedAt = &now 
+	}
+
 	freeAirdrop := AirdropFree{
 		ID:        primitive.NewObjectID(),
 		Name:      name,
@@ -57,18 +63,26 @@ func InsertAirdropFree(name, task, link, level, status, backed, funds, marketCap
 		Level:     level,
 		Status:    status,
 		Backed:    backed,
-		Funds:     funds,        
-		MarketCap: marketCap,    
+		Funds:     funds,
+		Supply:    supply,       
+		MarketCap: marketCap,
 		Vesting:   vesting,
 		LinkClaim: linkClaim,
 		Price:     price,
 		USDIncome: usdIncome,
 		CreatedAt: time.Now(),
+		EndedAt:   endedAt,        
 	}
 	return InsertOneDoc("airdrop_free", freeAirdrop)
 }
 
-func InsertAirdropPaid(name, task, link, level, status, backed, funds, marketCap, vesting, linkClaim string, price float64, usdIncome int) (interface{}, error) {
+func InsertAirdropPaid(name, task, link, level, status, backed, funds, supply, marketCap, vesting, linkClaim string, price float64, usdIncome int) (interface{}, error) {
+	var endedAt *time.Time
+	if status == "ended" {
+		now := time.Now()
+		endedAt = &now 
+	}
+
 	paidAirdrop := AirdropPaid{
 		ID:        primitive.NewObjectID(),
 		Name:      name,
@@ -77,13 +91,15 @@ func InsertAirdropPaid(name, task, link, level, status, backed, funds, marketCap
 		Level:     level,
 		Status:    status,
 		Backed:    backed,
-		Funds:     funds,        
-		MarketCap: marketCap,    
+		Funds:     funds,
+		Supply:    supply,         
+		MarketCap: marketCap,
 		Vesting:   vesting,
 		LinkClaim: linkClaim,
 		Price:     price,
 		USDIncome: usdIncome,
 		CreatedAt: time.Now(),
+		EndedAt:   endedAt,        
 	}
 	return InsertOneDoc("airdrop_paid", paidAirdrop)
 }
@@ -184,25 +200,33 @@ func GetAllAirdrop() ([]interface{}, error) {
 	return allAirdrops, nil
 }
 
-func UpdateAirdropFreeByID(id primitive.ObjectID, name, task, link, level, status, backed, funds, marketCap, vesting, linkClaim string, price float64, usdIncome int) error {
+func UpdateAirdropFreeByID(id primitive.ObjectID, name, task, link, level, status, backed, funds, supply, marketCap, vesting, linkClaim string, price float64, usdIncome int) error {
 	collection := "airdrop_free"
 	filter := bson.M{"_id": id}
 
+	updateFields := bson.M{
+		"name":       name,
+		"task":       task,
+		"link":       link,
+		"level":      level,
+		"status":     status,
+		"backed":     backed,
+		"funds":      funds,
+		"supply":     supply,       
+		"market_cap": marketCap,
+		"vesting":    vesting,
+		"link_claim": linkClaim,
+		"price":      price,
+		"usd_income": usdIncome,
+	}
+
+	if status == "ended" {
+		now := time.Now()
+		updateFields["ended_at"] = now
+	}
+
 	update := bson.M{
-		"$set": bson.M{
-			"name":       name,
-			"task":       task,
-			"link":       link,
-			"level":      level,
-			"status":     status,
-			"backed":     backed,
-			"funds":      funds,        
-			"market_cap": marketCap,   
-			"vesting":    vesting,
-			"link_claim": linkClaim,
-			"price":      price,
-			"usd_income": usdIncome,
-		},
+		"$set": updateFields,
 	}
 
 	result, err := database.Collection(collection).UpdateOne(context.Background(), filter, update)
@@ -217,25 +241,33 @@ func UpdateAirdropFreeByID(id primitive.ObjectID, name, task, link, level, statu
 	return nil
 }
 
-func UpdateAirdropPaidByID(id primitive.ObjectID, name, task, link, level, status, backed, funds, marketCap, vesting, linkClaim string, price float64, usdIncome int) error {
+func UpdateAirdropPaidByID(id primitive.ObjectID, name, task, link, level, status, backed, funds, supply, marketCap, vesting, linkClaim string, price float64, usdIncome int) error {
 	collection := "airdrop_paid"
 	filter := bson.M{"_id": id}
 
+	updateFields := bson.M{
+		"name":       name,
+		"task":       task,
+		"link":       link,
+		"level":      level,
+		"status":     status,
+		"backed":     backed,
+		"funds":      funds,
+		"supply":     supply,       
+		"market_cap": marketCap,
+		"vesting":    vesting,
+		"link_claim": linkClaim,
+		"price":      price,
+		"usd_income": usdIncome,
+	}
+
+	if status == "ended" {
+		now := time.Now()
+		updateFields["ended_at"] = now
+	}
+
 	update := bson.M{
-		"$set": bson.M{
-			"name":       name,
-			"task":       task,
-			"link":       link,
-			"level":      level,
-			"status":     status,
-			"backed":     backed,
-			"funds":      funds,        
-			"market_cap": marketCap,   
-			"vesting":    vesting,
-			"link_claim": linkClaim,
-			"price":      price,
-			"usd_income": usdIncome,
-		},
+		"$set": updateFields,
 	}
 
 	result, err := database.Collection(collection).UpdateOne(context.Background(), filter, update)

@@ -14,14 +14,15 @@ func TestInsertAirdropFree(t *testing.T) {
 	level := "easy"
 	status := "active"
 	backed := "HashKey Capital, ConsenSys"
-	funds := "53.37M"    
-	marketCap := "N/A"     
+	funds := "53.37M"
+	supply := "N/A"
+	marketCap := "N/A"
 	vesting := "N/A"
 	linkClaim := "N/A"
-	price := 0.0           
+	price := 0.0
 	usdIncome := 0
 
-	hasil, err := InsertAirdropFree(name, task, link, level, status, backed, funds, marketCap, vesting, linkClaim, price, usdIncome)
+	hasil, err := InsertAirdropFree(name, task, link, level, status, backed, funds, supply, marketCap, vesting, linkClaim, price, usdIncome)
 	if err != nil {
 		t.Errorf("Failed to insert AirdropFree: %v", err)
 	} else {
@@ -36,14 +37,15 @@ func TestInsertAirdropPaid(t *testing.T) {
 	level := "medium"
 	status := "active"
 	backed := "Bixin Ventures, GSR"
-	funds := "8.00M"        
-	marketCap := "N/A"  
+	funds := "8.00M"
+	supply := "N/A"
+	marketCap := "N/A"
 	vesting := "N/A"
-	linkClaim := "N/A"   
-	price := 0.0           
-	usdIncome := 0 
-	
-	hasil, err := InsertAirdropPaid(name, task, link, level, status, backed, funds, marketCap, vesting, linkClaim, price, usdIncome)
+	linkClaim := "N/A"
+	price := 0.0
+	usdIncome := 0
+
+	hasil, err := InsertAirdropPaid(name, task, link, level, status, backed, funds, supply, marketCap, vesting, linkClaim, price, usdIncome)
 	if err != nil {
 		t.Errorf("Failed to insert AirdropPaid: %v", err)
 	} else {
@@ -109,7 +111,7 @@ func TestGetAllAirdropPaid(t *testing.T) {
 }
 
 func TestGetAirdropFreeByID(t *testing.T) {
-	id, err := primitive.ObjectIDFromHex("66cfa14dd39e7e3b0c85b295") 
+	id, err := primitive.ObjectIDFromHex("66cfa14dd39e7e3b0c85b295")
 	if err != nil {
 		t.Errorf("Invalid ID format: %v", err)
 		return
@@ -159,7 +161,7 @@ func TestGetAirdropPaidByName(t *testing.T) {
 }
 
 func TestUpdateAirdropFreeByID(t *testing.T) {
-	id, err := primitive.ObjectIDFromHex("66f272a722665e34a611b33b")
+	id, err := primitive.ObjectIDFromHex("66f68eb6d7123a87a5065b63")
 	if err != nil {
 		t.Errorf("Invalid ID format: %v", err)
 		return
@@ -171,14 +173,15 @@ func TestUpdateAirdropFreeByID(t *testing.T) {
 	newLevel := "easy"
 	newStatus := "ended"
 	newBacked := "HashKey Capital, ConsenSys"
-	newFunds := "53.37M"       
-	newMarketCap := "632.23M"  
+	newFunds := "53.37M"
+	newSupply := "100M" 
+	newMarketCap := "632.23M"
 	newVesting := "no"
 	newLinkClaim := "https://protocol.carv.io/claim"
-	newPrice := 0.2      
+	newPrice := 0.2
 	newUSDIncome := 1200
-	
-	err = UpdateAirdropFreeByID(id, newName, newTask, newLink, newLevel, newStatus, newBacked, newFunds, newMarketCap, newVesting, newLinkClaim, newPrice, newUSDIncome)
+
+	err = UpdateAirdropFreeByID(id, newName, newTask, newLink, newLevel, newStatus, newBacked, newFunds, newSupply, newMarketCap, newVesting, newLinkClaim, newPrice, newUSDIncome)
 	if err != nil {
 		t.Errorf("Failed to update AirdropFree by ID: %v", err)
 		return
@@ -191,7 +194,7 @@ func TestUpdateAirdropFreeByID(t *testing.T) {
 	}
 
 	if airdrop.Name != newName || airdrop.Task != newTask || airdrop.Link != newLink || airdrop.Level != newLevel ||
-		airdrop.Status != newStatus || airdrop.Backed != newBacked || airdrop.Funds != newFunds ||
+		airdrop.Status != newStatus || airdrop.Backed != newBacked || airdrop.Funds != newFunds || airdrop.Supply != newSupply ||
 		airdrop.MarketCap != newMarketCap || airdrop.Vesting != newVesting || airdrop.LinkClaim != newLinkClaim ||
 		airdrop.Price != newPrice || airdrop.USDIncome != newUSDIncome {
 		t.Errorf("AirdropFree not updated correctly. Got: %+v", airdrop)
@@ -201,7 +204,7 @@ func TestUpdateAirdropFreeByID(t *testing.T) {
 }
 
 func TestUpdateAirdropPaidByID(t *testing.T) {
-	id, err := primitive.ObjectIDFromHex("66f19f85f40b23cd9a357e38")
+	id, err := primitive.ObjectIDFromHex("66f6905e14b6a0632a67bffd")
 	if err != nil {
 		t.Errorf("Invalid ID format: %v", err)
 		return
@@ -213,15 +216,15 @@ func TestUpdateAirdropPaidByID(t *testing.T) {
 	newLevel := "medium"
 	newStatus := "ended"
 	newBacked := "Bixin Ventures, GSR"
-	newFunds := "8.00M"        
-	newMarketCap := "788.75M"   
+	newFunds := "8.00M"
+	newSupply := "50M" 
+	newMarketCap := "788.75M"
 	newVesting := "yes"
 	newLinkClaim := "https://owlto.finance/airdrop"
-	newPrice := 0.5   
+	newPrice := 0.5
 	newUSDIncome := 230
-	
 
-	err = UpdateAirdropPaidByID(id, newName, newTask, newLink, newLevel, newStatus, newBacked, newFunds, newMarketCap, newVesting, newLinkClaim, newPrice, newUSDIncome)
+	err = UpdateAirdropPaidByID(id, newName, newTask, newLink, newLevel, newStatus, newBacked, newFunds, newSupply, newMarketCap, newVesting, newLinkClaim, newPrice, newUSDIncome)
 	if err != nil {
 		t.Errorf("Failed to update AirdropPaid by ID: %v", err)
 		return
@@ -234,7 +237,7 @@ func TestUpdateAirdropPaidByID(t *testing.T) {
 	}
 
 	if airdrop.Name != newName || airdrop.Task != newTask || airdrop.Link != newLink || airdrop.Level != newLevel ||
-		airdrop.Status != newStatus || airdrop.Backed != newBacked || airdrop.Funds != newFunds ||
+		airdrop.Status != newStatus || airdrop.Backed != newBacked || airdrop.Funds != newFunds || airdrop.Supply != newSupply ||
 		airdrop.MarketCap != newMarketCap || airdrop.Vesting != newVesting || airdrop.LinkClaim != newLinkClaim ||
 		airdrop.Price != newPrice || airdrop.USDIncome != newUSDIncome {
 		t.Errorf("AirdropPaid not updated correctly. Got: %+v", airdrop)
@@ -265,7 +268,7 @@ func TestDeleteAirdropFreeByID(t *testing.T) {
 }
 
 func TestDeleteAirdropPaidByID(t *testing.T) {
-	id, err := primitive.ObjectIDFromHex("66ea2fbcf75fbbced4145728")
+	id, err := primitive.ObjectIDFromHex("66f68c6ca4684f29ed12c4ec")
 	if err != nil {
 		t.Errorf("Invalid ID format: %v", err)
 		return
