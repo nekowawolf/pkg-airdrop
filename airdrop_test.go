@@ -160,6 +160,21 @@ func TestGetAirdropPaidByName(t *testing.T) {
 	fmt.Println("Paid Airdrops found:", airdrop)
 }
 
+func TestGetAllAirdropByName(t *testing.T) {
+	name := "Sender" 
+
+	airdrops, err := GetAllAirdropByName(name)
+	if err != nil {
+		t.Fatalf("Error calling GetAirdropByName: %v", err)
+	}
+
+	if len(airdrops) == 0 {
+		t.Errorf("No airdrops found with name '%s'", name)
+	} else {
+		fmt.Println("Airdrops found:", airdrops)
+	}
+}
+
 func TestUpdateAirdropFreeByID(t *testing.T) {
 	id, err := primitive.ObjectIDFromHex("66f68eb6d7123a87a5065b63")
 	if err != nil {
