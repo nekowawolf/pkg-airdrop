@@ -200,6 +200,28 @@ func GetAllAirdrop() ([]interface{}, error) {
 	return allAirdrops, nil
 }
 
+func GetAllAirdropByName(name string) ([]interface{}, error) {
+	var allAirdrops []interface{}
+
+	freeAirdrops, err := GetAirdropFreeByName(name)
+	if err != nil {
+		return nil, err
+	}
+	for _, free := range freeAirdrops {
+		allAirdrops = append(allAirdrops, free)
+	}
+
+	paidAirdrops, err := GetAirdropPaidByName(name)
+	if err != nil {
+		return nil, err
+	}
+	for _, paid := range paidAirdrops {
+		allAirdrops = append(allAirdrops, paid)
+	}
+
+	return allAirdrops, nil
+}
+
 func UpdateAirdropFreeByID(id primitive.ObjectID, name, task, link, level, status, backed, funds, supply, marketCap, vesting, linkClaim string, price float64, usdIncome int) error {
 	collection := "airdrop_free"
 	filter := bson.M{"_id": id}
